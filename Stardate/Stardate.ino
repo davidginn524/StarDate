@@ -28,21 +28,11 @@ int basedate = 58000; //this starts at year 2005
 int baseyear = 2005;//base year based on new movies time. Not all timelines sync up
 int currentdayofmonth; //current day of month in number form
 int currentyear; //current year
-short starmonth;//current month 
+byte starmonth;//current month 
 //change update values if debugging is on to make debugging quicker
 const unsigned long period = 10000;
-byte second, minute, hour, dayOfWeek, month, year, day;
-byte decToBcd(byte val)
-{
-  return ( (val / 10 * 16) + (val % 10) );
-}
-// Convert binary coded decimal to normal decimal numbers
-byte bcdToDec(byte val)
-{
-  return ( (val / 16 * 10) + (val % 16) );
-}
-
-int flag = 0; //used for display effects to stop it showing more than once
+byte second, minute, hour, dayOfWeek, month,  day;
+int year;
 
 int dayBrightness = 100;
 int nightBrightness = 30;
@@ -69,8 +59,11 @@ void loop()
   //formula for stardate basedate + (stardateunit*(currentyear-baseyear)) + ((stardateunit/)*(numbercorrespondingwithmonth + currentdayofmonth -1)) 
   currentyear = year;
   currentdayofmonth = month;
-  Serial.println(currentyear);
-  Serial.println(currentdayofmonth);
+  Serial.print("Year: ");
+  Serial.println (currentyear);
+  Serial.print("Month: ");
+  Serial.println(month);
+  
 
 }
 
@@ -124,7 +117,7 @@ void displayTime()
 
 }
 
-void readtime(byte *second, byte *minute, byte *hour, byte *dayOfWeek, byte *month, byte *year, byte *day) 
+void readtime(byte *second, byte *minute, byte *hour, byte *dayOfWeek, byte *month, int *year, byte *day) 
 {
 
       dateTime = NTPch.getNTPtime(0.0, 1);
@@ -137,5 +130,6 @@ void readtime(byte *second, byte *minute, byte *hour, byte *dayOfWeek, byte *mon
         *dayOfWeek = dateTime.dayofWeek;
         *month = dateTime.month;
         *year = dateTime.year; 
+        
       }
 }
