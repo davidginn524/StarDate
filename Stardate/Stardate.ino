@@ -9,24 +9,25 @@ NTPtime NTPch("pool.ntp.org"); // Choose server pool as required
 strDateTime dateTime;
 unsigned long startMillis;  //some global variables available anywhere in the program
 unsigned long currentMillis;
-short jan = 0;
-short feb = 31;
-short mar = 59;
-short apr = 90;
-short may = 120;
-short jun = 151;
-short jul = 181;
-short aug = 212;
-short sep = 243;
-short oct = 273;
-short nov = 304;
-short dec = 334;
+//numbercorrespondingwithmonth
+int jan = 0;
+int feb = 31;
+int mar = 59;
+int apr = 90;
+int may = 120;
+int jun = 151;
+int jul = 181;
+int aug = 212;
+int sep = 243;
+int oct = 273;
+int nov = 304;
+int dec = 334;
 int stardate;// final date to display
-short stardateunit = 1000; // 1 year = 1000 star units
+int stardateunit = 1000; // 1 year = 1000 star units
 int basedate = 58000; //this starts at year 2005
-short baseyear = 2005;//base year based on new movies time. Not all timelines sync up
-short starday; //current day 
-short staryear; //current year
+int baseyear = 2005;//base year based on new movies time. Not all timelines sync up
+int currentdayofmonth; //current day of month in number form
+int currentyear; //current year
 short starmonth;//current month 
 //change update values if debugging is on to make debugging quicker
 const unsigned long period = 10000;
@@ -63,8 +64,14 @@ void setup()
 
 void loop()
 {
-
+  
   displayTime(); // display the real-time clock data on the Serial Monitor  and the LEDS,
+  //formula for stardate basedate + (stardateunit*(currentyear-baseyear)) + ((stardateunit/)*(numbercorrespondingwithmonth + currentdayofmonth -1)) 
+  currentyear = year;
+  currentdayofmonth = month;
+  Serial.println(currentyear);
+  Serial.println(currentdayofmonth);
+
 }
 
 void TimeOfDay() {
