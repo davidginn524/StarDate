@@ -23,12 +23,14 @@ int oct = 273;
 int nov = 304;
 int dec = 334;
 int stardate;// final date to display
-int stardateunit = 1000; // 1 year = 1000 star units
+float stardateunit = 1000; // 1 year = 1000 star units
 int basedate = 58000; //this starts at year 2005
 int baseyear = 2005;//base year based on new movies time. Not all timelines sync up
 int currentdayofmonth; //current day of month in number form
+int numbercorrespondingwithmonth;
+float daysin1year; //does not account for leap year
 int currentyear; //current year
-byte starmonth;//current month 
+byte currentmonth;//current month 
 //change update values if debugging is on to make debugging quicker
 const unsigned long period = 10000;
 byte second, minute, hour, dayOfWeek, month,  day;
@@ -45,7 +47,7 @@ void setup()
   Serial.println("Connecting to Wi-Fi");
 // We start by connecting to a WiFi network
   WiFiManager MyWifiManager;
-  MyWifiManager.autoConnect("Word Clock");
+  MyWifiManager.autoConnect("Star Date Clock");
   Serial.println("WiFi connected");
 
   startMillis = millis();  //initial start time
@@ -54,15 +56,91 @@ void setup()
 
 void loop()
 {
-  
   displayTime(); // display the real-time clock data on the Serial Monitor  and the LEDS,
-  //formula for stardate basedate + (stardateunit*(currentyear-baseyear)) + ((stardateunit/)*(numbercorrespondingwithmonth + currentdayofmonth -1)) 
+  //formula for stardate basedate + (stardateunit*(currentyear-baseyear)) + ((stardateunit/daysin1year)*(numbercorrespondingwithmonth + currentdayofmonth -1)) 
   currentyear = year;
-  currentdayofmonth = month;
-  Serial.print("Year: ");
-  Serial.println (currentyear);
-  Serial.print("Month: ");
-  Serial.println(month);
+  currentdayofmonth = day;
+  currentmonth = month;
+  //check if leap year
+  if(year% 4 == 0 && year % 100 !=0 || year % 400 ==0)
+  {
+   Serial.println("Leap year");
+   daysin1year = 366;
+   
+  }
+  else
+  {
+    Serial.println("Not leap year");
+    daysin1year = 365;
+  }
+
+  
+  if (currentmonth == 1)
+  {
+    numbercorrespondingwithmonth = jan;
+    //Serial.print("Jan");
+    }
+   else if(currentmonth == 2)
+   {
+    numbercorrespondingwithmonth = feb;
+   // Serial.print("Feb");
+    }
+   else if(currentmonth == 3)
+   {
+    numbercorrespondingwithmonth = mar;
+    //Serial.print("Mar");
+    }
+   else if(currentmonth == 4)
+   {
+    numbercorrespondingwithmonth = apr;
+    //Serial.print("Apr");
+    }
+   else if(currentmonth == 5)
+   {
+    numbercorrespondingwithmonth = may;
+   // Serial.print("May");
+    }
+   else if(currentmonth == 6)
+   {
+    numbercorrespondingwithmonth = jun;
+    //Serial.print("Jun");
+    }
+   else if(currentmonth == 7)
+   {
+    numbercorrespondingwithmonth = jul;
+    //Serial.print("Jul");
+    }
+   else if(currentmonth == 8)
+   {
+    numbercorrespondingwithmonth = aug;
+    //Serial.print("Aug");
+    }
+   else if(currentmonth == 9)
+   {
+    numbercorrespondingwithmonth = sep;
+   // Serial.print("Sep");
+    }
+   else if(currentmonth == 10 )
+   {
+    numbercorrespondingwithmonth = oct;
+    //Serial.print("Oct");
+    }
+   else if(currentmonth == 11)
+   {
+    numbercorrespondingwithmonth = nov;
+    //Serial.print("Nov");
+    }
+   else
+   {
+    numbercorrespondingwithmonth = dec;
+    //Serial.print("Dec");
+    }
+     stardate = (basedate + (stardateunit*(currentyear-baseyear)) + ((stardateunit/daysin1year)*(numbercorrespondingwithmonth + currentdayofmonth -1)));
+     Serial.println(stardate);
+    
+//    =  * dayofmonthtotal;
+
+
   
 
 }
