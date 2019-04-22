@@ -4,6 +4,15 @@
 #include <WiFiManager.h>   
 #include <DNSServer.h>
 #define PIN            D8
+#include "DigitLedDisplay.h"
+
+
+
+/* Arduino Pin to Display Pin
+   7 to DIN,
+   6 to CS,
+   5 to CLK */
+DigitLedDisplay ld = DigitLedDisplay(7, 6, 5);
 
 NTPtime NTPch("pool.ntp.org"); // Choose server pool as required
 strDateTime dateTime;
@@ -52,6 +61,13 @@ void setup()
 
   startMillis = millis();  //initial start time
 
+
+
+  /* Set the brightness min:1, max:15 */
+  ld.setBright(10);
+
+  /* Set the digit count */
+  ld.setDigitLimit(8);
 }
 
 void loop()
@@ -140,6 +156,10 @@ void loop()
     
 //    =  * dayofmonthtotal;
 
+  /* Prints data to the display */
+  ld.printDigit(12345678);
+  delay(500);
+  ld.clear();
 
   
 
