@@ -3,7 +3,7 @@
 #include <WiFiUdp.h>
 #include <WiFiManager.h>   
 #include <DNSServer.h>
-#define PIN            D8
+//#define PIN            D8
 #include "DigitLedDisplay.h"
 
 
@@ -12,7 +12,7 @@
    7 to DIN,
    6 to CS,
    5 to CLK */
-DigitLedDisplay ld = DigitLedDisplay(7, 6, 5);
+DigitLedDisplay ld = DigitLedDisplay(D1, D8, D5);
 
 NTPtime NTPch("pool.ntp.org"); // Choose server pool as required
 strDateTime dateTime;
@@ -72,6 +72,10 @@ void setup()
 
 void loop()
 {
+    /* Prints data to the display */
+
+
+  
   displayTime(); // display the real-time clock data on the Serial Monitor  and the LEDS,
   //formula for stardate basedate + (stardateunit*(currentyear-baseyear)) + ((stardateunit/daysin1year)*(numbercorrespondingwithmonth + currentdayofmonth -1)) 
   currentyear = year;
@@ -156,12 +160,10 @@ void loop()
     
 //    =  * dayofmonthtotal;
 
-  /* Prints data to the display */
-  ld.printDigit(12345678);
-  delay(500);
+  ld.printDigit(stardate);
+  delay(10000);
+  Serial.println("display");
   ld.clear();
-
-  
 
 }
 
