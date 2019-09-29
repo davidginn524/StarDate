@@ -5,14 +5,16 @@
 #include <DNSServer.h>
 //#define PIN            D8
 #include "DigitLedDisplay.h"
-
+#include "MAX7219.h"
 
 
 /* Arduino Pin to Display Pin
    7 to DIN,
    6 to CS,
    5 to CLK */
-DigitLedDisplay ld = DigitLedDisplay(D1, D8, D5);
+//DigitLedDisplay ld = DigitLedDisplay(D1, D8, D5);
+MAX7219 dis = MAX7219(D1,D5,D8,8);
+
 
 NTPtime NTPch("pool.ntp.org"); // Choose server pool as required
 strDateTime dateTime;
@@ -45,8 +47,8 @@ const unsigned long period = 10000;
 byte second, minute, hour, dayOfWeek, month,  day;
 int year;
 
-int dayBrightness = 100;
-int nightBrightness = 30;
+int dayBrightness = 16;
+int nightBrightness = 4;
 
 void setup()
 {
@@ -64,17 +66,18 @@ void setup()
 
 
   /* Set the brightness min:1, max:15 */
-  ld.setBright(10);
-
+  //ld.setBright(10);
+  dis.init();
+  dis.setBrightness(3);
   /* Set the digit count */
-  ld.setDigitLimit(8);
+  //ld.setDigitLimit(8);
 }
 
 void loop()
 {
     /* Prints data to the display */
 
-
+  TimeOfDay();
   
   displayTime(); // display the real-time clock data on the Serial Monitor  and the LEDS,
   //formula for stardate basedate + (stardateunit*(currentyear-baseyear)) + ((stardateunit/daysin1year)*(numbercorrespondingwithmonth + currentdayofmonth -1)) 
@@ -159,11 +162,16 @@ void loop()
      Serial.println(stardate);
     
 //    =  * dayofmonthtotal;
-
-  ld.printDigit(stardate);
-  delay(10000);
+  
+ // ld.printDigit(stardate);
+  delay(1000);
+//  ld.printDigitPot(88, 7);
+  
+  dis.writeLong(stardate,0);
+  dis.setDecimalPoint(1);
+  dis.updateDisplay();
   Serial.println("display");
-  ld.clear();
+//  ld.clear();
 
 }
 
@@ -174,18 +182,23 @@ void TimeOfDay() {
 
   if ((dayOfWeek == 6) | (dayOfWeek == 7)) {
     if ((hour > 0) && (hour < 8)) {
-    //  pixels.setBrightness(nightBrightness);
+    //ld.setBright(4);
+    Serial.println("B set to 4 08");
+    
     }
     else {
-      //pixels.setBrightness(dayBrightness);
+     // ld.setBright(16);
+       Serial.println("B set to 16   e08");
     }
   }
   else {
     if ((hour < 6) | (hour >= 22)) {
-     // pixels.setBrightness(nightBrightness);
+     //ld.setBright(4);
+      Serial.println("B set to 4 622");
     }
     else {
-      //pixels.setBrightness(dayBrightness);
+      //ld.setBright(16);
+       Serial.println("B set to 16 e622");
     }
   }
 }
